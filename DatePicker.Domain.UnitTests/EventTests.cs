@@ -1,4 +1,5 @@
 using System;
+using DatePicker.Domain.UnitTests.Helpers;
 using Shouldly;
 using Xunit;
 
@@ -18,6 +19,26 @@ namespace DatePicker.Domain.UnitTests
             sut.User.ShouldBe(user);
             sut.DateTime.ShouldBe(dateTime);
             sut.Name.ShouldBe(name);
+        }
+
+        [Theory]
+        [ClassData(typeof(InvalidNamesData))]
+        public void Event_cannot_be_created_with_invalid_username(string invalidUserName)
+        {
+            var dateTime = DateTime.Now;
+            var name = "testname";
+
+            Should.Throw<ArgumentException>(() => new Event(invalidUserName, name, dateTime));
+        }
+
+        [Theory]
+        [ClassData(typeof(InvalidNamesData))]
+        public void Event_cannot_be_created_with_invalid_event_name(string invalidName)
+        {
+            var user = "testuser";
+            var dateTime = DateTime.Now;
+
+            Should.Throw<ArgumentException>(() => new Event(user, invalidName, dateTime));
         }
     }
 }
