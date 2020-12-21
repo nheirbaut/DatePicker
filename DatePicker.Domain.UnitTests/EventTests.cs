@@ -11,7 +11,7 @@ namespace DatePicker.Domain.UnitTests
         public void Event_can_be_created_for_user_with_event_name_and_date()
         {
             var user = "testuser";
-            var dateTime = DateTime.Now;
+            var dateTime = DateTime.Now + TimeSpan.FromDays(1);
             var name = "testname";
 
             var sut = new Event(user, name, dateTime);
@@ -25,7 +25,7 @@ namespace DatePicker.Domain.UnitTests
         [ClassData(typeof(InvalidNamesData))]
         public void Event_cannot_be_created_with_invalid_username(string invalidUserName)
         {
-            var dateTime = DateTime.Now;
+            var dateTime = DateTime.Now + TimeSpan.FromDays(1);
             var name = "testname";
 
             Should.Throw<ArgumentException>(() => new Event(invalidUserName, name, dateTime));
@@ -36,9 +36,19 @@ namespace DatePicker.Domain.UnitTests
         public void Event_cannot_be_created_with_invalid_event_name(string invalidName)
         {
             var user = "testuser";
-            var dateTime = DateTime.Now;
+            var dateTime = DateTime.Now + TimeSpan.FromDays(1);
 
             Should.Throw<ArgumentException>(() => new Event(user, invalidName, dateTime));
+        }
+
+        [Fact]
+        public void Event_cannot_be_created_with_past_date()
+        {
+            var user = "testuser";
+            var dateTimeInThePast = DateTime.Now - TimeSpan.FromDays(1);
+            var name = "testname";
+
+            Should.Throw<ArgumentException>(() => new Event(user, name, dateTimeInThePast));
         }
     }
 }

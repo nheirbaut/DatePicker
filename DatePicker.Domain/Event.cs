@@ -16,6 +16,9 @@ namespace DatePicker.Domain
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("The event name cannot be only whitespace or null", nameof(name));
 
+            if (dateTime < DateTime.Now)
+                throw new ArgumentException($"Cannot create an event with a date in the past: {dateTime}", nameof(dateTime));
+
             User = user;
             Name = name;
             DateTime = dateTime;
