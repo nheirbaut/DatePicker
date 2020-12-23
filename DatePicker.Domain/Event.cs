@@ -19,8 +19,7 @@ namespace DatePicker.Domain
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("The event name cannot be only whitespace or null", nameof(name));
 
-            if (dateTime < DateTime.Now)
-                throw new ArgumentException($"Cannot create an event with a date in the past: {dateTime}", nameof(dateTime));
+            ValidateProposedDateAndTime(dateTime);
 
             User = user;
             Name = name;
@@ -29,7 +28,15 @@ namespace DatePicker.Domain
 
         public void AddProposedDateAndTime(DateTime proposedDateTime)
         {
+            ValidateProposedDateAndTime(proposedDateTime);
+
             _proposedDateTimes.Add(proposedDateTime);
+        }
+
+        private static void ValidateProposedDateAndTime(DateTime proposedDateTime)
+        {
+            if (proposedDateTime < DateTime.Now)
+                throw new ArgumentException($"Cannot create an event with a date in the past: {proposedDateTime}", nameof(proposedDateTime));
         }
     }
 }

@@ -17,7 +17,7 @@ namespace DatePicker.Domain.UnitTests
             var sut = new Event(user, name, dateTime);
 
             sut.User.ShouldBe(user);
-            sut.ProposedDateTimes.ShouldBe(new [] { dateTime });
+            sut.ProposedDateTimes.ShouldBe(new[] { dateTime });
             sut.Name.ShouldBe(name);
         }
 
@@ -62,7 +62,20 @@ namespace DatePicker.Domain.UnitTests
 
             sut.AddProposedDateAndTime(dateTimeToPropose);
 
-            sut.ProposedDateTimes.ShouldBe(new [] { initialDateTime, dateTimeToPropose }, ignoreOrder: true);
+            sut.ProposedDateTimes.ShouldBe(new[] { initialDateTime, dateTimeToPropose }, ignoreOrder: true);
+        }
+
+        [Fact]
+        public void User_cannot_propose_past_date_and_time()
+        {
+            var user = "testuser";
+            var name = "testname";
+            var initialDateTime = DateTime.Now + TimeSpan.FromDays(1);
+            var dateTimeToProposeInThePast = DateTime.Now - TimeSpan.FromDays(1);
+            var sut = new Event(user, name, initialDateTime);
+
+            Should.Throw<ArgumentException>(() =>
+                sut.AddProposedDateAndTime(dateTimeToProposeInThePast));
         }
     }
 }
